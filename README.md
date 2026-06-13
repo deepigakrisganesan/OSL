@@ -1,4 +1,4 @@
-# OSL
+# Ontario Public Scetor Worforce Analysis
 
 Ontario Sunshine List published on a calendar year basis, contains the list of all public sector employees earning more than 100K CAD. This list is published as per the public sector salary disclosure act to provide greater transparency and accountability 
 
