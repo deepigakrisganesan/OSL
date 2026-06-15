@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "36533894fb4905039956",
+  "displayName": "Workforce Executive Dashboard",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "visualInteractions": [
+    {
+      "source": "34a566c39f6c283666dd",
+      "target": "ad0e7d0dbeac7a25c167",
+      "type": "DataFilter"
+    },
+    {
+      "source": "34a566c39f6c283666dd",
+      "target": "5d1273c947b4bba7dcf2",
+      "type": "DataFilter"
+    },
+    {
+      "source": "34a566c39f6c283666dd",
+      "target": "5c9cf2cada95e1ab1b5d",
+      "type": "DataFilter"
+    },
+    {
+      "source": "34a566c39f6c283666dd",
+      "target": "e81aee08faca0e0ee617",
+      "type": "DataFilter"
+    }
+  ]
+}

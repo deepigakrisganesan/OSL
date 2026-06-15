@@ -1,0 +1,13 @@
+relationship 18bd036a-379a-4b8c-a235-ea0481b4c076
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Date table'.Date
+	toColumn: LocalDateTable_356d0352-d19f-44c7-b15f-cc054bccaecf.Date
+
+relationship bea2a347-f91c-fcc1-909e-a5e2d3e31d66
+	fromColumn: OS_Final.'Base Year'
+	toColumn: 'Date table'.Date
+
+relationship 048fd1bc-d40a-70fc-3d2e-59c7f4914697
+	fromColumn: 'School Boards table'.'Base Year'
+	toColumn: 'Date table'.Date
+

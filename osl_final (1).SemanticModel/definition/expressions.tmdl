@@ -1,0 +1,69 @@
+expression Ontario_sunshine_2025 =
+		let
+		    Source = Csv.Document(File.Contents("C:\Users\Owner\OneDrive\Documents\Power BI\Skills for Change_Basic_Course\Capstone project\tbs-pssd-compendium-salary-disclosed-2025-en-utf-8-2026-03-23 (1).csv"),[Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sector", type text}, {"Last Name", type text}, {"First Name", type text}, {"Salary", type number}, {"Benefits", type number}, {"Employer", type text}, {"Job Title", type text}, {"Year", Int64.Type}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "Employer short form", each Text.Lower(
+		Text.Replace(
+		    Text.Start([Employer],9)," ",""))),
+		    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Job Title Custom", each Text.Remove(
+		Text.Lower(
+		Text.Replace(
+		    Text.Start([Job Title],4)," ","")),{",","/"})),
+		    #"Added Custom2" = Table.AddColumn(#"Added Custom1", "Email Id Custom", each Text.Lower([Last Name]&"."&[First Name]&"@"&[Employer short form]&[Job Title Custom]&".com")),
+		    #"Removed Duplicates" = Table.Distinct(#"Added Custom2", {"Email Id Custom"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"Employer short form", "Employer Short Form"}})
+		in
+		    #"Renamed Columns"
+	lineageTag: f61943ac-5a6b-45a8-ae22-4f75608375ee
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Ontario sunshine 2024' =
+		let
+		    Source = Csv.Document(File.Contents("C:\Users\Owner\OneDrive\Documents\Power BI\Skills for Change_Basic_Course\Capstone project\tbs-pssd-compendium-salary-disclosed-2024-en-utf-8-2026-01-29.csv"),[Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sector", type text}, {"Last Name", type text}, {"First Name", type text}, {"Salary", type number}, {"Benefits", type number}, {"Employer", type text}, {"Job Title", type text}, {"Year", Int64.Type}}),
+		    #"Added Custom1" = Table.AddColumn(#"Changed Type", "Employer Short form", each Text.Lower(
+		Text.Replace(
+		    Text.Start([Employer],9)," ",""))),
+		    #"Added Custom" = Table.AddColumn(#"Added Custom1", "Job Title Custom", each Text.Remove(
+		Text.Lower(
+		Text.Replace(
+		    Text.Start([Job Title],4)," ","")),{",","/"})),
+		    #"Added Custom2" = Table.AddColumn(#"Added Custom", "Email id Custom", each Text.Lower([Last Name]&"."&[First Name]&"@"&[Employer Short form]&[Job Title Custom]&".com")),
+		    #"Removed Duplicates" = Table.Distinct(#"Added Custom2", {"Email id Custom"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"Employer Short form", "Employer Short Form"}, {"Email id Custom", "Email Id Custom"}})
+		in
+		    #"Renamed Columns"
+	lineageTag: 5f10fab5-f9c3-475f-b92f-5c97f13e985d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Ontario sunshine 2023' =
+		let
+		    Source = Csv.Document(File.Contents("C:\Users\Owner\OneDrive\Documents\Power BI\Skills for Change_Basic_Course\Capstone project\tbs-pssd-compendium-salary-disclosed-2023-en-utf-8-2025-03-26 (1).csv"),[Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sector", type text}, {"Last Name", type text}, {"First Name", type text}, {"Salary", type number}, {"Benefits", type number}, {"Employer", type text}, {"JobTitle", type text}, {"Year", Int64.Type}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "Employer short form", each Text.Lower(
+		Text.Replace(
+		    Text.Start([Employer],9)," ",""))),
+		    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Job Title Custom", each Text.Remove(
+		Text.Lower(
+		Text.Replace(
+		    Text.Start([JobTitle],4)," ","")),{",","/"})),
+		    #"Added Custom2" = Table.AddColumn(#"Added Custom1", "Email Id Custom", each Text.Lower([Last Name]&"."&[First Name]&"@"&[Employer short form]&[Job Title Custom]&".com")),
+		    #"Removed Duplicates" = Table.Distinct(#"Added Custom2", {"Email Id Custom"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"JobTitle", "Job Title"}, {"Employer short form", "Employer Short Form"}})
+		in
+		    #"Renamed Columns"
+	lineageTag: 0e19553c-ccb6-47d8-b956-9c9dfa81eda1
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

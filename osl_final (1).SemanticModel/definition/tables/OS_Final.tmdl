@@ -1,0 +1,210 @@
+table OS_Final
+	lineageTag: 4c292e29-0e2d-497c-942e-24280837a334
+
+	column Sector
+		dataType: string
+		isHidden
+		lineageTag: 8aa13560-d4bb-4d0b-9b5f-65318f3c6033
+		summarizeBy: none
+		sourceColumn: Sector
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sector Group'
+		dataType: string
+		lineageTag: 1243260c-a9af-43aa-9357-6f1ad315d237
+		summarizeBy: none
+		sourceColumn: Sector Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last Name'
+		dataType: string
+		lineageTag: a28645f8-326d-4977-9738-d4a07bf5b161
+		summarizeBy: none
+		sourceColumn: Last Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Name'
+		dataType: string
+		lineageTag: 473ca03b-8dfa-49ad-a021-2b3297473736
+		summarizeBy: none
+		sourceColumn: First Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Salary
+		dataType: double
+		lineageTag: da185621-ea28-4361-aba8-cd20f9e07723
+		summarizeBy: sum
+		sourceColumn: Salary
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Benefits
+		dataType: double
+		lineageTag: bebc2cc9-b9a9-48ed-85b3-f824778f19f5
+		summarizeBy: sum
+		sourceColumn: Benefits
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Employer
+		dataType: string
+		lineageTag: d26df9f2-85cb-41e5-b90e-c579184d7ea8
+		summarizeBy: none
+		sourceColumn: Employer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Title'
+		dataType: string
+		lineageTag: 8a8d6ca9-6424-4b83-bd78-deac43885a20
+		summarizeBy: none
+		sourceColumn: Job Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Base Year'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8fb64b64-5a07-481d-9a58-d0b32ff29bbc
+		summarizeBy: none
+		sourceColumn: Base Year
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Employer Short Form'
+		dataType: string
+		lineageTag: c678f222-5c8a-41ea-8007-a7542a1cbcb4
+		summarizeBy: none
+		sourceColumn: Employer Short Form
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Title Custom'
+		dataType: string
+		lineageTag: fa312ee0-3c00-481d-908e-7b06ae6311a8
+		summarizeBy: none
+		sourceColumn: Job Title Custom
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Id Custom'
+		dataType: string
+		lineageTag: e480fa92-3323-4f7c-bd5a-03cf13b8b149
+		summarizeBy: none
+		sourceColumn: Email Id Custom
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Family' = ```
+			
+			VAR Title = LOWER(OS_Final[Job Title])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    CONTAINSSTRING(Title, "chief") || 
+			    CONTAINSSTRING(Title, "ceo") || 
+			    CONTAINSSTRING(Title, "cfo"), "Executive",
+			
+			    CONTAINSSTRING(Title, "vp") ||
+			    CONTAINSSTRING(Title, "vice president"), "Leadership",
+			
+			    CONTAINSSTRING(Title, "director"), "Leadership",
+			
+			    CONTAINSSTRING(Title, "manager"), "Management",
+			    CONTAINSSTRING(Title, "supervisor"), "Management",
+			
+			    CONTAINSSTRING(Title, "engineer"), "Technical",
+			    CONTAINSSTRING(Title, "developer"), "Technical",
+			    CONTAINSSTRING(Title, "architect"), "Technical",
+			
+			    CONTAINSSTRING(Title, "analyst"), "Analytics",
+			
+			    CONTAINSSTRING(Title, "teacher"), "Education",
+			    CONTAINSSTRING(Title, "professor"), "Education",
+			    CONTAINSSTRING(Title, "instructor"), "Education",
+			    CONTAINSSTRING(Title, "lecturer"), "Education",
+			
+			    CONTAINSSTRING(Title, "nurse"), "Healthcare",
+			    CONTAINSSTRING(Title, "physician"), "Healthcare",
+			    CONTAINSSTRING(Title, "doctor"), "Healthcare",
+			
+			    CONTAINSSTRING(Title, "hr"), "HR / People",
+			    CONTAINSSTRING(Title, "finance"), "Finance",
+			
+			    "Other"
+			)
+			```
+		lineageTag: 6f36e13e-7430-4308-b91c-266e4e1c669a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition OS_Final = m
+		mode: import
+		source =
+				let
+				    Source = Table.Combine({#"Ontario sunshine 2023", #"Ontario sunshine 2024", Ontario_sunshine_2025}),
+				    #"Filtered Rows" = Table.SelectRows(Source, each true),
+				    #"Trimmed Text" = Table.TransformColumns(#"Filtered Rows",{{"Sector", Text.Trim, type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Trimmed Text", "Custom", each if List.Contains(
+				    {"Government of Ontario - Judiciary",
+					"Government of Ontario – Judiciary",
+					"Government of Ontario - Ministries",
+					"Government of Ontario – Ministries",
+					"Government of Ontario - Legislative Assembly",
+					"Government of Ontario – Legislative Assembly",
+					"Government of Ontario - Legislative Assembly and Offices",
+					"Government of Ontario – Legislative Assembly and Offices",
+					"Government of Ontario – Ministries"
+				},
+				    [Sector]
+				)
+				then "Government of Ontario"
+				else if List.Contains({"Seconded (Attorney General)*",
+					"Seconded (Cabinet Office)*",
+					"Seconded (Children, Community and Social Services)*",
+					"Seconded (Citizenship and Multiculturalism)*",
+					"Seconded (Education)*",
+					"Seconded (Energy)*",
+					"Seconded (Health)*",
+					"Seconded (Natural Resources and Forestry)*",
+					"Seconded (Solicitor General)*",
+					"Seconded (Tourism, Culture and Gaming)*",
+					"Seconded (Tourism, Culture and Sport)*"
+				
+				}, [Sector]
+				)
+				
+				then "Seconded"
+				
+				else [Sector]),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Custom",{"Sector", "Custom", "Last Name", "First Name", "Salary", "Benefits", "Employer", "Job Title", "Year", "Employer Short Form", "Job Title Custom", "Email Id Custom"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"Custom", "Sector Group"}}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Renamed Columns", each true),
+				    #"Replaced Value" = Table.ReplaceValue(#"Filtered Rows1","hospitals & Boards of Public Health","Hospitals & Boards of Public Health",Replacer.ReplaceText,{"Sector Group"}),
+				    #"Filtered Rows2" = Table.SelectRows(#"Replaced Value", each true),
+				    #"Added Custom1" = Table.AddColumn(#"Filtered Rows2", "Base Year", each #date([Year],1,1)),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Custom1",{{"Base Year", type date}}),
+				    #"Reordered Columns1" = Table.ReorderColumns(#"Changed Type",{"Sector", "Sector Group", "Last Name", "First Name", "Salary", "Benefits", "Employer", "Job Title", "Year", "Base Year", "Employer Short Form", "Job Title Custom", "Email Id Custom"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Reordered Columns1",{"Year"}),
+				    #"Filtered Rows3" = Table.SelectRows(#"Removed Columns", each true)
+				in
+				    #"Filtered Rows3"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

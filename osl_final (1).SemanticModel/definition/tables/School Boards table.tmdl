@@ -1,0 +1,118 @@
+table 'School Boards table'
+	lineageTag: db5c60c1-3081-4a5f-a341-e0e47cca0557
+
+	column Sector
+		lineageTag: 77bea5f9-cc61-43dd-9da3-46cc97d44d40
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Sector]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sector Group'
+		lineageTag: fa079f0a-2614-4a33-9e2d-310b8abb3386
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Sector Group]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last Name'
+		lineageTag: 36555b3b-af95-4ee1-ad70-a27260930e14
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Last Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Name'
+		lineageTag: 45b785ca-2ef9-43f2-85b8-5c10c45757e0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[First Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Salary
+		lineageTag: 607cc499-f3b1-40cf-b988-abdcdf76ac90
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: OS_Final[Salary]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Benefits
+		lineageTag: 572d7e88-48d2-47e1-988a-346bcba1e448
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: OS_Final[Benefits]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Employer
+		lineageTag: cb034e80-77aa-440a-89f7-8021f61b48e4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Employer]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Title'
+		lineageTag: 593c77ab-9c37-4056-9477-5b2fea199800
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Job Title]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Base Year'
+		formatString: General Date
+		lineageTag: cde5c165-bf0b-46c2-b296-0a41acfb9d3f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Base Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Employer Short Form'
+		lineageTag: d227a8a9-fd40-499d-bcd3-f3f539fdc016
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Employer Short Form]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Title Custom'
+		lineageTag: 58c3127d-a611-4f2a-bd4f-7959849f16a1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Job Title Custom]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Email Id Custom'
+		lineageTag: eb90f0c0-45a9-45ad-96b8-828c4f52ff4e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Email Id Custom]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Family'
+		lineageTag: 8dcec3d9-e531-4398-ad3f-9683495a3ba8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: OS_Final[Job Family]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'School Boards table' = calculated
+		mode: import
+		source = FILTER(OS_Final,CONTAINSSTRING(OS_Final[Employer],"school board"))
+
+	annotation PBI_Id = cad596376dfb44cc811b6d789d6ec0f8
+

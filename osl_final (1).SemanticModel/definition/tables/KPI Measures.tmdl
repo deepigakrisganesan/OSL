@@ -1,0 +1,99 @@
+table 'KPI Measures'
+	lineageTag: 16d7ec39-2869-4838-98ae-fd8d539bc64c
+
+	measure 'Median Taxable Benefits' = MEDIAN(OS_Final[Benefits])
+		lineageTag: b6af0343-e945-4f89-b3b2-27b2981800a8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Salary' = AVERAGE(OS_Final[Salary])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: cf4f3a0f-9630-4d47-b4c7-b3eb3938ef02
+
+	measure 'Employee Count' = COUNT(OS_Final[Email Id Custom])
+		formatString: 0
+		lineageTag: e3b04bd0-8f61-43f8-8427-7d56b746c6b4
+
+	measure 'Median Salary' = MEDIAN(OS_Final[Salary])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 795fee54-7039-4e86-9787-f43e832aee67
+
+	measure 'Median Salary_S' = MEDIAN('School Boards table'[Salary])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 53d02616-03ac-472c-9de6-12fbcf47c86e
+
+	measure 'Prior Year Average Salary' = CALCULATE([Average Salary],SAMEPERIODLASTYEAR('Date table'[Date]))
+		lineageTag: 0b8ed0fd-2e6e-4575-ab72-06dffc91c0f8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Prior Year Employee Count' = CALCULATE([Total Employee Count],SAMEPERIODLASTYEAR('Date table'[Date]))
+		formatString: 0
+		lineageTag: 51508fea-f391-4559-b872-44929be4776c
+
+	measure 'Prior Year Payroll' = CALCULATE([Total Payroll],SAMEPERIODLASTYEAR('Date table'[Date]))
+		lineageTag: 47fd2940-11a6-4202-89f4-d9dc631dee4d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top Earner Salary' = max(OS_Final[Salary])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 51ce7a7b-a8ab-43b9-a942-fc6f34a597f6
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Top Salary Org' = MAXX(TOPN(1, OS_Final, OS_Final[Salary], DESC), OS_Final[Employer])
+		lineageTag: 59d80f86-9285-4726-bfa2-f982fa8d9073
+
+	measure 'Total Employee Count' = COUNTROWS(OS_Final)
+		formatString: 0
+		lineageTag: 3a85ead0-7af0-4f74-8cfd-326101f1b776
+
+	measure 'Total Payroll' = SUM(OS_Final[Salary])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 6ef317c6-d0ed-4327-8483-49130d074f9c
+
+	measure 'Total Payroll Schools' = SUM('School Boards table'[Salary])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: e16c3a74-3113-439f-8a40-0790ec2248e0
+
+	measure 'Total School Board Employee Count' = COUNTROWS('School Boards table')
+		formatString: 0
+		lineageTag: a571df06-bbf2-4ee1-8d75-d1b53a85094c
+
+	measure 'YoY AvgSalary growth%' =
+			VAR AvS=[Prior Year Average Salary] RETURN IF (ISBLANK(AvS),BLANK(),
+			DIVIDE([Average Salary]-AvS,AvS))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 81b062fd-8025-4d21-a4fd-bd851df8636f
+
+	measure 'YoY EmployeeCountgrowth%' =
+			VAR EC=[Prior Year Employee Count] RETURN IF (ISBLANK(EC),BLANK(),
+			DIVIDE([Total Employee Count]-EC,EC))
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f6c414e7-3616-454d-b02b-cc1efef66123
+
+	measure 'YoY Payroll Growth %' =
+			
+			VAR PY = [Prior Year Payroll]
+			RETURN
+			IF(
+			    ISBLANK(PY),
+			    BLANK(),
+			    DIVIDE([Total Payroll] - PY, PY)
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a3079ce2-b619-4ae4-91d4-dcfd682af140
+
+	partition 'KPI Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WMlSKjQUA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [XYS = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"XYS", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"XYS"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+
