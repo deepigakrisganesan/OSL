@@ -1,8 +1,0 @@
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
-  "name": "d18bd09e1ff6d960c651",
-  "displayName": "Median Salary across Sectors",
-  "displayOption": "FitToPage",
-  "height": 720,
-  "width": 1280
-}
